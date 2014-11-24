@@ -1,0 +1,18 @@
+{
+  "name": "maven-build",
+  "main": "./lib/maven-build",
+  "version": "0.0.1",
+  "description": "Execute Maven Targets",
+  "author":"Matt Hogan <matt.x.hogan@aib.ie>",
+  "activationevents": {
+    "atom-workspace": "maven-build:mavenVersion",
+    "atom-workspace": "maven-build:mavenPackage"
+  },
+  "repository": "https://github.com/atom/maven-build",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}

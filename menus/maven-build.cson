@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle maven-build'
+      'command': 'maven-build:toggle'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'maven-build'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'maven-build:toggle'
+        }
+      ]
+    ]
+  }
+]

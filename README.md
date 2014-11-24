@@ -1,4 +1,3 @@
-atom-maven-build
-================
+# maven-build package
 
-Execute Maven Targets in Atom.io
+A short description of your package.
