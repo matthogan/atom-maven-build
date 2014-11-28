@@ -1,29 +1,40 @@
 # decls
+path = require('path')
 {View, BufferedProcess, $$} = require 'atom'
 COMMANDS = {VERSION:'--version',PACKAGE:'package'}
-# configuration items for maven
-config:
-  mvnPath:
-    type: 'string'
-    default: 'mvn.bat'
-  settings:
-    type: 'string'
-    default: 'C:\\projects\\pl\\maven\\settings.xml'
-  javaHome:
-    type: 'string'
-    default: 'C:\\Java\\jdk1.7.0_45'
-  m2Home:
-    type: 'string'
-    default: 'C:\\Java\\apache-maven-3.1.1'
-  debug:
-    type: 'boolean'
-    default: true
+MavenBuildView = require './maven-build-view'
 
 module.exports =
+  mavenBuildView: null
+
+  # configuration items for maven
+  config:
+    mvnPath:
+      type: 'string'
+      default: 'mvn.bat'
+    settings:
+      type: 'string'
+      default: 'C:\\projects\\pl\\maven\\settings.xml'
+    javaHome:
+      type: 'string'
+      default: 'C:\\Java\\jdk1.7.0_45'
+    m2Home:
+      type: 'string'
+      default: 'C:\\Java\\apache-maven-3.1.1'
+    debug:
+      type: 'boolean'
+      default: true
 
   activate: (state) ->
+    @mavenBuildView = new MavenBuildView(state.mavenBuildViewState)
     atom.commands.add 'atom-workspace', 'maven-build:mavenVersion', => @mavenVersion()
     atom.commands.add 'atom-workspace', 'maven-build:mavenPackage', => @mavenPackage()
+
+  deactivate: ->
+    @mavenBuildView.destroy()
+
+  serialize: ->
+    mavenBuildViewState: @mavenBuildView.serialize()
 
   debug: (text) ->
     if atom.config.get('maven-build.debug')
@@ -64,7 +75,7 @@ module.exports =
       # exec params
       config = @mavenConfig()
       # get the full path, windows stylee
-      command = "#{config.m2Home}\\bin\\#{config.command}"
+      command = "#{config.m2Home}#{path.sep}bin#{path.sep}#{config.command}"
       # only if settings are being customised
       args = [target]
       # need the settings.xml be customised

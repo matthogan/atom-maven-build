@@ -2,7 +2,7 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle maven-build'
+      'label': 'Toggle Maven Build'
       'command': 'maven-build:toggle'
     }
   ]
@@ -10,11 +10,35 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'maven-build'
+      'label': 'Maven Build'
       'submenu': [
         {
           'label': 'Toggle'
           'command': 'maven-build:toggle'
+        }
+      ]
+    ]
+  },
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Maven Build'
+      'submenu': [
+        {
+          'label': 'Version'
+          'command': 'maven-build:mavenVersion'
+        }
+      ]
+    ]
+  },
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Maven Build'
+      'submenu': [
+        {
+          'label': 'Package'
+          'command': 'maven-build:mavenPackage'
         }
       ]
     ]
