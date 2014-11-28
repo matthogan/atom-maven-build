@@ -42,5 +42,17 @@
         }
       ]
     ]
+  },
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Maven Build'
+      'submenu': [
+        {
+          'label': 'Generate Web App'
+          'command': 'maven-build:mavenGenerateWebApp'
+        }
+      ]
+    ]
   }
 ]

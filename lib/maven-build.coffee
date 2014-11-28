@@ -1,7 +1,7 @@
 # decls
 path = require('path')
 {View, BufferedProcess, $$} = require 'atom'
-COMMANDS = {VERSION:'--version',PACKAGE:'package'}
+COMMANDS = {VERSION:'--version',PACKAGE:'package',GENERATE:'archetype:generate'}
 MavenBuildView = require './maven-build-view'
 
 module.exports =
@@ -15,6 +15,18 @@ module.exports =
     settings:
       type: 'string'
       default: 'C:\\projects\\pl\\maven\\settings.xml'
+    groupId:
+      type: 'string'
+      default: 'com.mycompany.app'
+    artifactId:
+      type: 'string'
+      default: 'my-webapp'
+    archetypeWebapp:
+      type: 'string'
+      default: 'maven-archetype-webapp'
+    archetypeQuickstart:
+      type: 'string'
+      default: 'maven-archetype-quickstart'
     javaHome:
       type: 'string'
       default: 'C:\\Java\\jdk1.7.0_45'
@@ -29,6 +41,7 @@ module.exports =
     @mavenBuildView = new MavenBuildView(state.mavenBuildViewState)
     atom.commands.add 'atom-workspace', 'maven-build:mavenVersion', => @mavenVersion()
     atom.commands.add 'atom-workspace', 'maven-build:mavenPackage', => @mavenPackage()
+    atom.commands.add 'atom-workspace', 'maven-build:mavenGenerateWebApp', => @mavenGenerateWebApp()
 
   deactivate: ->
     @mavenBuildView.destroy()
@@ -45,7 +58,10 @@ module.exports =
     {command:atom.config.get('maven-build.mvnPath'),
     settings:atom.config.get('maven-build.settings'),
     javaHome:atom.config.get('maven-build.javaHome'),
-    m2Home:atom.config.get('maven-build.m2Home')}
+    m2Home:atom.config.get('maven-build.m2Home'),
+    groupId:atom.config.get('maven-build.groupId'),
+    artifactId:atom.config.get('maven-build.artifactId'),
+    archetypeArtifactId:atom.config.get('maven-build.archetypeArtifactId')}
 
   # all mandatory even though they can be set at the os-level
   mavenValidateSettings: (target) ->
@@ -66,7 +82,7 @@ module.exports =
     valid
 
   # run that maven thingy
-  mavenExec: (target) ->
+  mavenExec: (target,args) ->
     valid = @mavenValidateSettings(target)
     # meaningful indentation...
     if not valid
@@ -77,7 +93,10 @@ module.exports =
       # get the full path, windows stylee
       command = "#{config.m2Home}#{path.sep}bin#{path.sep}#{config.command}"
       # only if settings are being customised
-      args = [target]
+      if not args
+        args = [target]
+      else
+        args = [target].concat(args)
       # need the settings.xml be customised
       if config.settings
         args.push '--settings'
@@ -98,6 +117,32 @@ module.exports =
       # mathematical function concept as it applies to
       # coffeescript...
       yes
+
+  validateConfigParam: (param) ->
+      @debug("validateConfigParam:param=#{param}")
+      if param and param.length > 0
+        yes
+      else
+        no
+
+  mavenGenerateApp: (groupId,artifactId,archetypeArtifactId) ->
+    if @validateConfigParam(groupId) and @validateConfigParam(artifactId) and @validateConfigParam(archetypeArtifactId)
+      target = "#{COMMANDS.GENERATE}"
+      args = ["-DgroupId=#{groupId}","-DartifactId=#{artifactId}","-DarchetypeArtifactId=#{archetypeArtifactId}"]
+      @mavenExec(target,args)
+      atom.reload
+      yes
+    else
+      @debug("mavenGenerateApp::validateConfigParam::a parameter is invalid")
+      no
+
+  mavenGenerateSimpleApp: ->
+    config = @mavenConfig()
+    @mavenGenerateApp(config.groupId,config.artifactId,'maven-archetype-webapp')
+
+  mavenGenerateWebApp: ->
+    config = @mavenConfig()
+    @mavenGenerateApp(config.groupId,config.artifactId,'maven-archetype-webapp')
 
   mavenPackage: ->
     @mavenExec(COMMANDS.PACKAGE)

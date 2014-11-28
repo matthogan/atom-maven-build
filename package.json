@@ -1,14 +1,15 @@
 {
   "name": "maven-build",
   "main": "./lib/maven-build",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Execute Maven Targets",
   "activationCommands": {
     "atom-workspace": "maven-build:toggle"
   },
   "activationevents": {
     "atom-workspace": "maven-build:mavenVersion",
-    "atom-workspace": "maven-build:mavenPackage"
+    "atom-workspace": "maven-build:mavenPackage",
+    "atom-workspace": "maven-build:mavenGenerateWebApp"
   },
   "repository": "https://github.com/matthogan/atom-maven-build.git",
   "license": "MIT",
