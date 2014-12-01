@@ -1,11 +1,12 @@
 # decls
+MavenBuildView = require './maven-build-view'
 path = require('path')
 {View, BufferedProcess, $$} = require 'atom'
-COMMANDS = {VERSION:'--version',PACKAGE:'package',GENERATE:'archetype:generate'}
-MavenBuildView = require './maven-build-view'
 
 module.exports =
   mavenBuildView: null
+  # list of available maven commands
+  COMMANDS = {VERSION:'--version',PACKAGE:'package',GENERATE:'archetype:generate'}
 
   # configuration items for maven
   config:
@@ -42,6 +43,7 @@ module.exports =
     atom.commands.add 'atom-workspace', 'maven-build:mavenVersion', => @mavenVersion()
     atom.commands.add 'atom-workspace', 'maven-build:mavenPackage', => @mavenPackage()
     atom.commands.add 'atom-workspace', 'maven-build:mavenGenerateWebApp', => @mavenGenerateWebApp()
+    atom.commands.add 'atom-workspace', 'maven-build:mavenGenerateSimpleApp', => @mavenGenerateSimpleApp()
 
   deactivate: ->
     @mavenBuildView.destroy()
@@ -61,7 +63,8 @@ module.exports =
     m2Home:atom.config.get('maven-build.m2Home'),
     groupId:atom.config.get('maven-build.groupId'),
     artifactId:atom.config.get('maven-build.artifactId'),
-    archetypeArtifactId:atom.config.get('maven-build.archetypeArtifactId')}
+    archetypeWebapp:atom.config.get('maven-build.archetypeWebapp'),
+    archetypeQuickstart:atom.config.get('maven-build.archetypeQuickstart')}
 
   # all mandatory even though they can be set at the os-level
   mavenValidateSettings: (target) ->
@@ -119,11 +122,11 @@ module.exports =
       yes
 
   validateConfigParam: (param) ->
-      @debug("validateConfigParam:param=#{param}")
-      if param and param.length > 0
-        yes
-      else
-        no
+    @debug("validateConfigParam:param=#{param}")
+    if param and param.length > 0
+      yes
+    else
+      no
 
   mavenGenerateApp: (groupId,artifactId,archetypeArtifactId) ->
     if @validateConfigParam(groupId) and @validateConfigParam(artifactId) and @validateConfigParam(archetypeArtifactId)
@@ -138,14 +141,14 @@ module.exports =
 
   mavenGenerateSimpleApp: ->
     config = @mavenConfig()
-    @mavenGenerateApp(config.groupId,config.artifactId,'maven-archetype-webapp')
+    @mavenGenerateApp(config.groupId,config.artifactId,config.archetypeQuickstart)
 
   mavenGenerateWebApp: ->
     config = @mavenConfig()
-    @mavenGenerateApp(config.groupId,config.artifactId,'maven-archetype-webapp')
+    @mavenGenerateApp(config.groupId,config.artifactId,config.archetypeWebapp)
 
   mavenPackage: ->
-    @mavenExec(COMMANDS.PACKAGE)
+    @mavenExec(COMMANDS.PACKAGE,[])
 
   mavenVersion: ->
-    @mavenExec(COMMANDS.VERSION)
+    @mavenExec(COMMANDS.VERSION,[])

@@ -8,3 +8,13 @@ I'm sure someone can do a better job but I haven't found such a tool yet.
 Warning: Code will be rudimentary and laughable for Node.js experts... My
 JavaScript know-how is strictly 1990s. I haven't learned the conventions yet
 and I don't understand the packaging API well enough.
+
+## Issues
+
+#### Uninstall/Install
+
+Uninstall any package, install again, fails silently.
+
+Similar to this:-
+
+[impossible-to-reinstall-uninstalled-package](https://discuss.atom.io/t/impossible-to-reinstall-uninstalled-package/3020)

@@ -9,6 +9,7 @@
   "activationevents": {
     "atom-workspace": "maven-build:mavenVersion",
     "atom-workspace": "maven-build:mavenPackage",
+    "atom-workspace": "maven-build:mavenGenerateSimpleApp",
     "atom-workspace": "maven-build:mavenGenerateWebApp"
   },
   "repository": "https://github.com/matthogan/atom-maven-build.git",

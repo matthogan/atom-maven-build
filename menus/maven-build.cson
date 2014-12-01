@@ -49,6 +49,18 @@
       'label': 'Maven Build'
       'submenu': [
         {
+          'label': 'Generate Simple App'
+          'command': 'maven-build:mavenGenerateSimpleApp'
+        }
+      ]
+    ]
+  },
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Maven Build'
+      'submenu': [
+        {
           'label': 'Generate Web App'
           'command': 'maven-build:mavenGenerateWebApp'
         }
